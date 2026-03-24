@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
+    Consolas, "Liberation Mono", "Courier New", monospace;
+
+  /* Backgrounds */
+  --color-bg-page: #0a0a0a;
+  --color-bg-surface: #0f0f0f;
+  --color-bg-elevated: #1a1a1a;
+  --color-bg-input: #111111;
+
+  /* Text */
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #6b7280;
+  --color-text-tertiary: #4b5563;
+
+  /* Borders */
+  --color-border-primary: #2a2a2a;
+  --color-border-focus: #10b981;
+
+  /* Accents */
+  --color-accent-green: #10b981;
+  --color-accent-red: #ef4444;
+  --color-accent-amber: #f59e0b;
+  --color-accent-cyan: #06b6d4;
+
+  /* Diff backgrounds */
+  --color-diff-removed-bg: #1a0a0a;
+  --color-diff-added-bg: #0a1a0f;
+  --color-diff-context-bg: transparent;
+}
+
+body {
+  @apply bg-bg-page text-text-primary font-sans;
+}
