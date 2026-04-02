@@ -1,8 +1,8 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { CollapsibleCode } from "@/components/collapsible-code";
 import { SectionTitle } from "@/components/ui/section-title";
-import { TableRow, TableRowCell } from "@/components/ui/table-row";
 import { useTRPC } from "@/trpc/client";
 
 export function LeaderboardPreview() {
@@ -43,35 +43,46 @@ export function LeaderboardPreview() {
       </p>
 
       {/* Table */}
-      <div className="overflow-hidden rounded border border-border-primary">
+      <div className="overflow-hidden rounded-lg border border-border-primary">
         {/* Header */}
-        <div className="flex h-10 items-center gap-0 bg-bg-surface px-5">
-          <span className="w-[50px] font-mono text-xs font-medium text-text-tertiary">
-            #
+        <div className="flex items-center border-b border-border-primary bg-bg-elevated px-5 py-3">
+          <span className="w-16 font-mono text-xs text-text-tertiary">
+            Rank
           </span>
-          <span className="w-[70px] font-mono text-xs font-medium text-text-tertiary">
-            score
-          </span>
-          <span className="flex-1 font-mono text-xs font-medium text-text-tertiary">
-            code
-          </span>
-          <span className="w-[100px] text-right font-mono text-xs font-medium text-text-tertiary">
-            lang
+          <span className="flex-1 font-mono text-xs text-text-tertiary">
+            Roast
           </span>
         </div>
 
         {/* Rows */}
         {data.map((entry, index) => (
-          <TableRow key={entry.slug}>
-            <TableRowCell variant="rank">{index + 1}</TableRowCell>
-            <TableRowCell variant="score">{Number(entry.score)}</TableRowCell>
-            <TableRowCell variant="code">
-              <div className="line-clamp-3 whitespace-pre-wrap font-mono">
-                {entry.sourceCode}
-              </div>
-            </TableRowCell>
-            <TableRowCell variant="lang">{entry.language}</TableRowCell>
-          </TableRow>
+          <div
+            key={entry.slug}
+            className="flex border-b border-border-primary px-5 py-4 last:border-b-0"
+          >
+            {/* Rank + Score */}
+            <div className="flex w-16 flex-col items-start gap-1">
+              <span
+                className={`font-mono text-xs font-bold ${index === 0 ? "text-accent-amber" : "text-text-secondary"}`}
+              >
+                #{index + 1}
+              </span>
+              <span className="font-mono text-xs text-accent-red">
+                {Number(entry.score)}
+              </span>
+            </div>
+
+            {/* Code + Language */}
+            <div className="flex flex-1 flex-col gap-3">
+              <CollapsibleCode
+                code={entry.sourceCode}
+                language={entry.language}
+              />
+              <span className="font-mono text-xs text-accent-cyan">
+                {entry.language}
+              </span>
+            </div>
+          </div>
         ))}
       </div>
 

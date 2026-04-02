@@ -13,41 +13,45 @@ export function LeaderboardSkeleton() {
       <Skeleton className="h-4 w-80" />
 
       {/* Table */}
-      <div className="overflow-hidden rounded border border-border-primary">
+      <div className="overflow-hidden rounded-lg border border-border-primary">
         {/* Header */}
-        <div className="flex h-10 items-center gap-0 bg-bg-surface px-5">
-          <span className="w-[50px] font-mono text-xs font-medium text-text-tertiary">
-            #
+        <div className="flex items-center border-b border-border-primary bg-bg-elevated px-5 py-3">
+          <span className="w-16 font-mono text-xs text-text-tertiary">
+            Rank
           </span>
-          <span className="w-[70px] font-mono text-xs font-medium text-text-tertiary">
-            score
-          </span>
-          <span className="flex-1 font-mono text-xs font-medium text-text-tertiary">
-            code
-          </span>
-          <span className="w-[100px] text-right font-mono text-xs font-medium text-text-tertiary">
-            lang
+          <span className="flex-1 font-mono text-xs text-text-tertiary">
+            Roast
           </span>
         </div>
 
         {/* Skeleton Rows */}
         {Array.from({ length: 3 }).map((_, i) => (
           <div
-            // biome-ignore lint/suspicious/noArrayIndexKey: static skeleton
             key={i}
-            className="flex items-center gap-0 border-b border-border-primary px-5 py-4"
+            className="flex border-b border-border-primary px-5 py-4 last:border-b-0"
           >
-            <div className="w-[50px]">
+            {/* Rank + Score */}
+            <div className="flex w-16 flex-col items-start gap-2">
               <Skeleton className="h-4 w-6" />
+              <Skeleton className="h-4 w-8" />
             </div>
-            <div className="w-[70px]">
-              <Skeleton className="h-4 w-10" />
-            </div>
-            <div className="flex flex-1 flex-col gap-2">
-              <Skeleton className="h-4 w-full" />
-              <Skeleton className="h-4 w-3/4" />
-            </div>
-            <div className="flex w-[100px] justify-end">
+
+            {/* Code + Language */}
+            <div className="flex flex-1 flex-col gap-3">
+              <div className="rounded border border-border-primary bg-bg-input">
+                <div className="flex">
+                  <div className="flex w-10 shrink-0 flex-col gap-0.5 border-r border-border-primary bg-bg-surface px-2 py-3">
+                    <Skeleton className="h-3 w-4" />
+                    <Skeleton className="h-3 w-4" />
+                    <Skeleton className="h-3 w-4" />
+                  </div>
+                  <div className="flex flex-1 flex-col gap-2 px-3 py-3">
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-3/4" />
+                    <Skeleton className="h-4 w-1/2" />
+                  </div>
+                </div>
+              </div>
               <Skeleton className="h-4 w-16" />
             </div>
           </div>

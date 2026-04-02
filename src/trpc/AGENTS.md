@@ -64,6 +64,21 @@ export default async function Page() {
 }
 ```
 
+### Prefetch paralelo com Promise.all
+
+Quando múltiplas queries são independentes, executar em paralelo:
+
+```tsx
+void Promise.all([
+  prefetch(trpc.stats.global.queryOptions()),
+  prefetch(trpc.roast.leaderboard.queryOptions({ limit: 3 })),
+]);
+```
+
+- `void` — fire-and-forget, não bloqueia renderização
+- `Promise.all` — executa queries em paralelo
+- Prefetch é rápido o suficiente que `Promise.all` vs sequencial raramente importa para TTFB, mas é boa prática
+
 ### Query em Client Component
 
 ```tsx

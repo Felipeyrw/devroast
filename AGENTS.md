@@ -39,6 +39,7 @@ Next.js 16.1.6 · Tailwind v4 · Biome · pnpm · TypeScript strict · Drizzle O
 | `tailwind-variants` | Component variants (don't use `twMerge` directly) |
 | `@base-ui/react` | Headless primitives (Toggle, etc.) |
 | `shiki` | Syntax highlighting (Server Component) |
+| `highlight.js` | Syntax highlighting (Client Component) |
 | `@trpc/server` + `@trpc/client` | Typed API layer (v11) |
 | `@trpc/tanstack-react-query` | RSC prefetch + hooks |
 | `@tanstack/react-query` | Query client, hydration, suspense |
@@ -92,6 +93,25 @@ function Counter({ target }: { target: number }) {
 - `continuous` plugin faz dígitos passarem por valores intermediários (conta, não pula)
 - `spinTiming` de 1500ms dá tempo da animação ser visível
 - NÃO usar `<Suspense>` + skeleton para números inline — o 0→valor já é o loading state
+
+## Syntax Highlighting
+
+Dois mecanismos disponíveis — escolher conforme o contexto:
+
+| Mecanismo | Onde | Quando usar |
+|-----------|------|-------------|
+| `shiki` (`codeToHtml`) | Server Component (`CodeBlock`) | Código estático, SSR, sem interação |
+| `highlight.js` (`hljs.highlight`) | Client Component (`CollapsibleCode`) | Código interativo, collapsible, client-side |
+
+**Regra:** `shiki` é async — não funciona dentro de `"use client"`. Para componentes interativos que precisam de syntax highlight, usar `highlight.js`.
+
+### Collapsible Code
+
+`CollapsibleCode` — base-ui `Collapsible` + `highlight.js`. Mostra N linhas com botão para expandir:
+
+```tsx
+<CollapsibleCode code={sourceCode} language="javascript" collapsedLines={3} />
+```
 
 ## Database
 

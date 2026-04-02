@@ -8,8 +8,10 @@ import { HydrateClient, prefetch, trpc } from "@/trpc/server";
 export const dynamic = "force-dynamic";
 
 export default function HomePage() {
-  prefetch(trpc.stats.global.queryOptions());
-  prefetch(trpc.roast.leaderboard.queryOptions({ limit: 3 }));
+  void Promise.all([
+    prefetch(trpc.stats.global.queryOptions()),
+    prefetch(trpc.roast.leaderboard.queryOptions({ limit: 3 })),
+  ]);
 
   return (
     <HydrateClient>
