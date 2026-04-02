@@ -1,10 +1,12 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
-    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco,
-    Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-sans:
+    ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono:
+    "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
 
   /* Backgrounds */
   --color-bg-page: #0a0a0a;
@@ -35,4 +37,17 @@
 
 body {
   @apply bg-bg-page text-text-primary font-sans;
+}
+
+/* Shiki output reset */
+.shiki-output pre {
+  margin: 0;
+  padding: 0;
+  background: transparent !important;
+}
+
+.shiki-output code {
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
 }

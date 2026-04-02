@@ -5,16 +5,14 @@ const buttonStyles = tv({
     "inline-flex items-center justify-center",
     "font-mono font-medium",
     "transition-colors",
-    "disabled:pointer-events-none disabled:opacity-50",
+    "disabled:cursor-not-allowed disabled:opacity-50",
   ],
   variants: {
     variant: {
-      primary:
-        "bg-accent-green text-bg-page enabled:hover:opacity-90",
+      primary: "bg-accent-green text-bg-page enabled:hover:brightness-90",
       secondary:
         "border border-border-primary text-text-primary enabled:hover:bg-bg-elevated",
-      link:
-        "border border-border-primary text-text-secondary enabled:hover:text-text-primary",
+      link: "border border-border-primary text-text-secondary enabled:hover:text-text-primary",
     },
     size: {
       sm: "px-3 py-1.5 text-xs gap-1.5",

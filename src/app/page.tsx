@@ -1,9 +1,16 @@
+"use client";
+
+import { useRef, useState } from "react";
+import { CodeEditor, type CodeEditorHandle } from "@/components/code-editor";
 import { Button } from "@/components/ui/button";
 import { SectionTitle } from "@/components/ui/section-title";
 import { TableRow, TableRowCell } from "@/components/ui/table-row";
 import { Toggle, ToggleLabel } from "@/components/ui/toggle";
 
 export default function HomePage() {
+  const editorRef = useRef<CodeEditorHandle>(null);
+  const [roastMode, setRoastMode] = useState(true);
+
   return (
     <main className="flex flex-1 flex-col items-center">
       <div className="flex w-full max-w-4xl flex-col gap-12 px-10 py-20">
@@ -18,41 +25,33 @@ export default function HomePage() {
             </h1>
           </div>
           <p className="font-mono text-sm text-text-secondary">
-            {"//"} drop your code below and we&apos;ll rate it — brutally
-            honest or full roast mode
+            {"//"} drop your code below and we&apos;ll rate it — brutally honest
+            or full roast mode
           </p>
         </div>
 
-        {/* Code Input */}
-        <div className="overflow-hidden rounded border border-border-primary bg-bg-input">
-          {/* Window Header */}
-          <div className="flex h-10 items-center border-b border-border-primary px-4">
-            <div className="flex items-center gap-2">
-              <span className="size-3 rounded-full bg-accent-red" />
-              <span className="size-3 rounded-full bg-accent-amber" />
-              <span className="size-3 rounded-full bg-accent-green" />
-            </div>
-          </div>
-
-          {/* Textarea */}
-          <textarea
-            spellCheck={false}
-            rows={16}
-            className="w-full resize-none bg-transparent px-4 py-4 font-mono text-xs leading-6 text-text-primary outline-none placeholder:text-text-tertiary"
-            placeholder="paste your code here..."
-          />
-        </div>
+        {/* Code Editor */}
+        <CodeEditor ref={editorRef} />
 
         {/* Actions Bar */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Toggle size="md" defaultChecked />
+            <Toggle
+              size="md"
+              checked={roastMode}
+              onCheckedChange={setRoastMode}
+            />
             <ToggleLabel>roast mode</ToggleLabel>
             <span className="font-mono text-xs text-text-tertiary">
               {"//"} maximum sarcasm enabled
             </span>
           </div>
-          <Button variant="primary" size="md">
+          <Button
+            variant="primary"
+            size="md"
+            disabled={!roastMode}
+            onClick={() => editorRef.current?.submit()}
+          >
             roast_my_code
           </Button>
         </div>
@@ -111,7 +110,9 @@ export default function HomePage() {
               <TableRowCell variant="code">
                 <div>eval(prompt(&quot;enter code&quot;))</div>
                 <div>document.write(response)</div>
-                <div className="text-text-tertiary">{"//"} trust the user lol</div>
+                <div className="text-text-tertiary">
+                  {"//"} trust the user lol
+                </div>
               </TableRowCell>
               <TableRowCell variant="lang">javascript</TableRowCell>
             </TableRow>
@@ -130,7 +131,9 @@ export default function HomePage() {
               <TableRowCell variant="score">2.1</TableRowCell>
               <TableRowCell variant="code">
                 <div>SELECT * FROM users WHERE 1=1</div>
-                <div className="text-text-tertiary">{"--"} TODO: add authentication</div>
+                <div className="text-text-tertiary">
+                  {"--"} TODO: add authentication
+                </div>
               </TableRowCell>
               <TableRowCell variant="lang">sql</TableRowCell>
             </TableRow>
