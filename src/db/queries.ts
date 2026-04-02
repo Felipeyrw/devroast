@@ -1,4 +1,4 @@
-import { asc, avg, count, eq } from "drizzle-orm";
+import { asc, avg, count, eq, min } from "drizzle-orm";
 import { db } from "./index";
 import { issues, roasts, submissions } from "./schema";
 
@@ -124,6 +124,7 @@ export async function getGlobalStats() {
     .select({
       total: count(),
       avgScore: avg(roasts.score),
+      worstScore: min(roasts.score),
     })
     .from(roasts);
 
