@@ -1,4 +1,5 @@
 import { asc, avg, count, eq, min } from "drizzle-orm";
+import { unstable_cache } from "next/cache";
 import { db } from "./index";
 import { issues, roasts, submissions } from "./schema";
 
@@ -82,6 +83,12 @@ export async function getLeaderboard(limit = 50) {
     .limit(limit);
 }
 
+export const getLeaderboardCached = unstable_cache(
+  async (limit = 50) => getLeaderboard(limit),
+  ["leaderboard"],
+  { revalidate: 3600, tags: ["leaderboard"] },
+);
+
 export async function getRoastBySlug(slug: string) {
   const [row] = await db
     .select({
@@ -130,3 +137,9 @@ export async function getGlobalStats() {
 
   return row;
 }
+
+export const getGlobalStatsCached = unstable_cache(
+  async () => getGlobalStats(),
+  ["global-stats"],
+  { revalidate: 3600, tags: ["stats"] },
+);
