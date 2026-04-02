@@ -1,6 +1,6 @@
 "use client";
 
-import NumberFlow from "@number-flow/react";
+import NumberFlow, { continuous } from "@number-flow/react";
 import { useQuery } from "@tanstack/react-query";
 import { useTRPC } from "@/trpc/client";
 
@@ -14,13 +14,23 @@ export function GlobalMetrics() {
   return (
     <div className="flex items-center justify-center gap-6">
       <span className="font-mono text-xs text-text-tertiary">
-        <NumberFlow value={total} format={{ useGrouping: true }} /> codes
-        roasted
+        <NumberFlow
+          value={total}
+          format={{ useGrouping: true }}
+          plugins={[continuous]}
+          spinTiming={{ duration: 1500, easing: "ease-out" }}
+        />{" "}
+        codes roasted
       </span>
       <span className="font-mono text-xs text-text-tertiary">{"·"}</span>
       <span className="font-mono text-xs text-text-tertiary">
         avg score:{" "}
-        <NumberFlow value={avgScore} format={{ maximumFractionDigits: 1 }} />
+        <NumberFlow
+          value={avgScore}
+          format={{ maximumFractionDigits: 1 }}
+          plugins={[continuous]}
+          spinTiming={{ duration: 1500, easing: "ease-out" }}
+        />
         /10
       </span>
     </div>
