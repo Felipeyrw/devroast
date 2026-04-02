@@ -10,6 +10,7 @@ import { Toggle, ToggleLabel } from "@/components/ui/toggle";
 export default function HomePage() {
   const editorRef = useRef<CodeEditorHandle>(null);
   const [roastMode, setRoastMode] = useState(true);
+  const [limitExceeded, setLimitExceeded] = useState(false);
 
   return (
     <main className="flex flex-1 flex-col items-center">
@@ -31,7 +32,7 @@ export default function HomePage() {
         </div>
 
         {/* Code Editor */}
-        <CodeEditor ref={editorRef} />
+        <CodeEditor ref={editorRef} onLimitChange={setLimitExceeded} />
 
         {/* Actions Bar */}
         <div className="flex items-center justify-between">
@@ -49,7 +50,7 @@ export default function HomePage() {
           <Button
             variant="primary"
             size="md"
-            disabled={!roastMode}
+            disabled={!roastMode || limitExceeded}
             onClick={() => editorRef.current?.submit()}
           >
             roast_my_code

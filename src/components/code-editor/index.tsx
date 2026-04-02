@@ -12,6 +12,8 @@ import { detectLanguage, type SupportedLanguage } from "./detect-language";
 import { HighlightedCode } from "./highlighted";
 import { LanguagePicker } from "./language-picker";
 
+export const CODE_CHAR_LIMIT = 2000;
+
 export interface CodeEditorHandle {
   submit: () => void;
 }
@@ -19,12 +21,13 @@ export interface CodeEditorHandle {
 interface CodeEditorProps {
   onSubmit?: (code: string, language: SupportedLanguage) => void;
   onLanguageDetected?: (language: SupportedLanguage) => void;
+  onLimitChange?: (exceeded: boolean) => void;
 }
 
 const DETECT_DEBOUNCE_MS = 300;
 
 export const CodeEditor = forwardRef<CodeEditorHandle, CodeEditorProps>(
-  function CodeEditor({ onSubmit, onLanguageDetected }, ref) {
+  function CodeEditor({ onSubmit, onLanguageDetected, onLimitChange }, ref) {
     const [code, setCode] = useState("");
     const [language, setLanguage] = useState<SupportedLanguage>("javascript");
     const [highlighted, setHighlighted] = useState(false);
@@ -110,6 +113,13 @@ export const CodeEditor = forwardRef<CodeEditorHandle, CodeEditorProps>(
 
     const showOverlay = highlighted && shikiReady;
 
+    const charCount = code.length;
+    const overLimit = charCount > CODE_CHAR_LIMIT;
+
+    useEffect(() => {
+      onLimitChange?.(overLimit);
+    }, [overLimit, onLimitChange]);
+
     return (
       <div className="overflow-hidden rounded border border-border-primary bg-bg-input">
         {/* Window Header */}
@@ -173,6 +183,7 @@ export const CodeEditor = forwardRef<CodeEditorHandle, CodeEditorProps>(
             onScroll={handleScroll}
             spellCheck={false}
             rows={8}
+            maxLength={CODE_CHAR_LIMIT + 500}
             className={`relative z-10 w-full resize-none bg-transparent px-4 py-4 font-mono text-xs leading-6 outline-none placeholder:text-text-tertiary ${
               showOverlay
                 ? "text-transparent caret-accent-green"
@@ -180,6 +191,21 @@ export const CodeEditor = forwardRef<CodeEditorHandle, CodeEditorProps>(
             }`}
             placeholder="paste your code here..."
           />
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-end border-t border-border-primary px-4 py-1.5">
+          <span
+            className={`font-mono text-xs transition-colors ${
+              overLimit
+                ? "text-accent-red"
+                : charCount > CODE_CHAR_LIMIT * 0.8
+                  ? "text-accent-amber"
+                  : "text-text-tertiary"
+            }`}
+          >
+            {charCount.toLocaleString()} / {CODE_CHAR_LIMIT.toLocaleString()}
+          </span>
         </div>
       </div>
     );
