@@ -24,14 +24,14 @@ const Navbar = ({ className, children, ...props }: NavbarProps) => {
   );
 };
 
-interface NavbarLogoProps extends React.HTMLAttributes<HTMLDivElement> {}
+interface NavbarLogoProps extends React.HTMLAttributes<HTMLAnchorElement> {}
 
 const NavbarLogo = ({ className, ...props }: NavbarLogoProps) => {
   return (
-    <div className={navbarLogoStyles({ className })} {...props}>
+    <a href="/" className={navbarLogoStyles({ className })} {...props}>
       <span className="text-xl font-bold text-accent-green">{">"}</span>
       <span className="text-lg font-medium text-text-primary">devroast</span>
-    </div>
+    </a>
   );
 };
 

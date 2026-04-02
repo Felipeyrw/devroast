@@ -76,9 +76,12 @@ export default function HomePage() {
           {/* Title Row */}
           <div className="flex items-center justify-between">
             <SectionTitle>shame_leaderboard</SectionTitle>
-            <div className="border border-border-primary px-3 py-1.5 font-mono text-xs text-text-secondary transition-colors enabled:hover:text-text-primary">
+            <a
+              href="/leaderboard"
+              className="cursor-pointer border border-border-primary px-3 py-1.5 font-mono text-xs text-text-secondary transition-colors hover:bg-bg-elevated hover:text-text-primary"
+            >
               view_all {"<<"}
-            </div>
+            </a>
           </div>
 
           {/* Subtitle */}
