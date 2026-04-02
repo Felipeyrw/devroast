@@ -2,14 +2,20 @@
 
 import NumberFlow, { continuous } from "@number-flow/react";
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
 import { useTRPC } from "@/trpc/client";
 
 export function GlobalMetrics() {
   const trpc = useTRPC();
   const { data } = useQuery(trpc.stats.global.queryOptions());
+  const [ready, setReady] = useState(false);
 
-  const total = Number(data?.total ?? 0);
-  const avgScore = Number(data?.avgScore ?? 0);
+  useEffect(() => {
+    setReady(true);
+  }, []);
+
+  const total = ready ? Number(data?.total ?? 0) : 0;
+  const avgScore = ready ? Number(data?.avgScore ?? 0) : 0;
 
   return (
     <div className="flex items-center justify-center gap-6">
