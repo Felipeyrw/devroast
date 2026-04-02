@@ -6,6 +6,7 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
+import { DiffLine } from "@/components/ui/diff-line";
 import { ScoreRing } from "@/components/ui/score-ring";
 import { SectionTitle } from "@/components/ui/section-title";
 
@@ -45,8 +46,13 @@ export default async function RoastResultsPage({
               </h1>
             </div>
 
-            <p className="font-mono text-sm text-text-secondary">
-              Analysis complete for roast ID: {id}
+            <p className="font-mono text-sm text-accent-red">
+              &quot;this code looks like it was written during a power
+              outage&quot;
+            </p>
+
+            <p className="font-mono text-xs text-text-tertiary">
+              Roast ID: {id}
             </p>
 
             <div className="flex items-center gap-4">
@@ -68,6 +74,12 @@ export default async function RoastResultsPage({
               <span className="font-mono text-xs text-text-tertiary">
                 5 critical issues found
               </span>
+              <button
+                type="button"
+                className="ml-auto cursor-pointer rounded border border-border-primary px-3 py-1.5 font-mono text-xs text-text-secondary transition-colors enabled:hover:border-accent-green enabled:hover:text-accent-green"
+              >
+                share
+              </button>
             </div>
           </div>
         </div>
@@ -166,34 +178,88 @@ export default async function RoastResultsPage({
         {/* Suggestions Section */}
         <div className="mb-10">
           <SectionTitle>suggestions</SectionTitle>
-          <div className="mt-4">
-            <CodeBlock
-              code={`function calculateTotal(items) {
-  if (!Array.isArray(items)) {
-    throw new Error('Items must be an array');
-  }
+          <div className="mt-4 overflow-hidden rounded border border-border-primary">
+            {/* Window Header */}
+            <div className="flex h-10 items-center border-b border-border-primary bg-bg-input px-4">
+              <div className="flex items-center gap-2">
+                <span className="size-3 rounded-full bg-accent-red" />
+                <span className="size-3 rounded-full bg-accent-amber" />
+                <span className="size-3 rounded-full bg-accent-green" />
+              </div>
+              <span className="ml-4 font-mono text-xs text-text-secondary">
+                calculateTotal.fixed.js
+              </span>
+            </div>
 
-  const DISCOUNT_THRESHOLD = 100;
-  const DISCOUNT_RATE = 0.9;
-
-  let total = 0;
-  for (const item of items) {
-    if (typeof item.price !== 'number') {
-      throw new Error('Invalid item price');
-    }
-    total += item.price;
-  }
-
-  if (total > DISCOUNT_THRESHOLD) {
-    total *= DISCOUNT_RATE;
-  }
-
-  return total;
-}`}
-              language="javascript"
-              showWindowHeader={true}
-              filename="calculateTotal.fixed.js"
-            />
+            {/* Diff Lines */}
+            <div className="bg-bg-input">
+              <DiffLine
+                type="context"
+                content="function calculateTotal(items) {"
+              />
+              <DiffLine type="removed" content="  var total = 0;" />
+              <DiffLine type="added" content="  if (!Array.isArray(items)) {" />
+              <DiffLine
+                type="added"
+                content="    throw new Error('Items must be an array');"
+              />
+              <DiffLine type="added" content="  }" />
+              <DiffLine type="context" content="" />
+              <DiffLine
+                type="added"
+                content="  const DISCOUNT_THRESHOLD = 100;"
+              />
+              <DiffLine type="added" content="  const DISCOUNT_RATE = 0.9;" />
+              <DiffLine type="context" content="" />
+              <DiffLine
+                type="removed"
+                content="  for (var i = 0; i < items.length; i++) {"
+              />
+              <DiffLine
+                type="removed"
+                content="    total = total + items[i].price;"
+              />
+              <DiffLine type="removed" content="  }" />
+              <DiffLine type="added" content="  let total = 0;" />
+              <DiffLine type="added" content="  for (const item of items) {" />
+              <DiffLine
+                type="added"
+                content="    if (typeof item.price !== 'number') {"
+              />
+              <DiffLine
+                type="added"
+                content="      throw new Error('Invalid item price');"
+              />
+              <DiffLine type="added" content="    }" />
+              <DiffLine type="added" content="    total += item.price;" />
+              <DiffLine type="added" content="  }" />
+              <DiffLine type="context" content="" />
+              <DiffLine type="removed" content="  if (total > 100) {" />
+              <DiffLine
+                type="removed"
+                content={`    console.log("discount applied");`}
+              />
+              <DiffLine type="removed" content="    total = total * 0.9;" />
+              <DiffLine type="removed" content="  }" />
+              <DiffLine
+                type="added"
+                content="  if (total > DISCOUNT_THRESHOLD) {"
+              />
+              <DiffLine type="added" content="    total *= DISCOUNT_RATE;" />
+              <DiffLine type="added" content="  }" />
+              <DiffLine type="context" content="" />
+              <DiffLine
+                type="removed"
+                content="  // TODO: handle tax calculation"
+              />
+              <DiffLine
+                type="removed"
+                content="  // TODO: handle currency conversion"
+              />
+              <DiffLine type="context" content="" />
+              <DiffLine type="context" content="  return total;" />
+              <DiffLine type="context" content="}" />
+            </div>
           </div>
         </div>
 
