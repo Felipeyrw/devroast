@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { NavbarNavigation } from "@/components/navbar-navigation";
 import { Navbar, NavbarLogo } from "@/components/ui/navbar";
+import { TRPCReactProvider } from "@/trpc/client";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -17,11 +18,13 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full antialiased">
       <body className="flex min-h-full flex-col bg-bg-page font-sans text-text-primary">
-        <Navbar>
-          <NavbarLogo />
-          <NavbarNavigation />
-        </Navbar>
-        {children}
+        <TRPCReactProvider>
+          <Navbar>
+            <NavbarLogo />
+            <NavbarNavigation />
+          </Navbar>
+          {children}
+        </TRPCReactProvider>
       </body>
     </html>
   );
