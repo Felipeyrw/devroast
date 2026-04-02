@@ -1,6 +1,7 @@
 "use client";
 
 import { Collapsible } from "@base-ui/react/collapsible";
+import "highlight.js/styles/atom-one-dark.css";
 import hljs from "highlight.js";
 import { useMemo } from "react";
 
@@ -22,11 +23,11 @@ export function CollapsibleCode({
   language,
   collapsedLines = 3,
 }: CollapsibleCodeProps) {
-  const lines = code.split("\n");
+  const lines = useMemo(() => code.trimEnd().split("\n"), [code]);
   const isCollapsible = lines.length > collapsedLines;
 
   const highlightedFull = useMemo(
-    () => highlight(code, language),
+    () => highlight(code.trimEnd(), language),
     [code, language],
   );
 
@@ -51,11 +52,9 @@ export function CollapsibleCode({
           />
         </div>
 
-        {/* Full code (expanded state) */}
-        <Collapsible.Panel className="h-[300px] overflow-hidden">
-          <div className="h-full overflow-auto">
-            <CodeContent html={highlightedFull} lines={lines} />
-          </div>
+        {/* Full code (expanded state) — height auto, max 300px with scroll */}
+        <Collapsible.Panel className="max-h-[300px] overflow-auto">
+          <CodeContent html={highlightedFull} lines={lines} />
         </Collapsible.Panel>
 
         {/* Fade overlay on collapsed */}
