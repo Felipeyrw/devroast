@@ -39,10 +39,59 @@ Next.js 16.1.6 · Tailwind v4 · Biome · pnpm · TypeScript strict · Drizzle O
 | `tailwind-variants` | Component variants (don't use `twMerge` directly) |
 | `@base-ui/react` | Headless primitives (Toggle, etc.) |
 | `shiki` | Syntax highlighting (Server Component) |
+| `@trpc/server` + `@trpc/client` | Typed API layer (v11) |
+| `@trpc/tanstack-react-query` | RSC prefetch + hooks |
+| `@tanstack/react-query` | Query client, hydration, suspense |
+| `@number-flow/react` | Animated number transitions |
 
 ## Docs
 
 - UI patterns: `src/components/ui/AGENTS.md`
+- tRPC patterns: `src/trpc/AGENTS.md`
+
+## Server Components
+
+Convertemos pages de `"use client"` para Server Components quando possível:
+
+1. Page vira `async` Server Component
+2. Lógica interativa (refs, state, handlers) vai para componente `"use client"` separado
+3. Prefetch de dados no server com `prefetch(trpc.xxx.queryOptions())`
+4. Dados hidratados via `<HydrateClient>`
+
+**Exemplo:** `page.tsx` → `CodeEditorSection` (client) + `GlobalMetrics` (client)
+
+### force-dynamic
+
+Pages que usam `prefetch()` com tRPC precisam de `export const dynamic = "force-dynamic"` — `headers()` é chamado no context e falha durante prerender.
+
+## Animated Numbers (NumberFlow)
+
+Para números que contam de 0 ao valor real em toda carga de página:
+
+```tsx
+"use client";
+import NumberFlow, { continuous } from "@number-flow/react";
+import { useEffect, useState } from "react";
+
+function Counter({ target }: { target: number }) {
+  const [ready, setReady] = useState(false);
+  useEffect(() => { setReady(true); }, []);
+
+  return (
+    <NumberFlow
+      value={ready ? target : 0}
+      plugins={[continuous]}
+      spinTiming={{ duration: 1500, easing: "ease-out" }}
+    />
+  );
+}
+```
+
+**Regras:**
+- `useState(false)` + `useEffect` força começar em 0 toda vez que o componente monta
+- `continuous` plugin faz dígitos passarem por valores intermediários (conta, não pula)
+- `spinTiming` de 1500ms dá tempo da animação ser visível
+- NÃO usar `<Suspense>` + skeleton para números inline — o 0→valor já é o loading state
 
 ## Database
 

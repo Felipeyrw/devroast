@@ -118,3 +118,4 @@ For components with interaction behavior, use `@base-ui/react` headless primitiv
 | SectionTitle | `section-title.tsx` | SectionTitle | size: sm, md, lg |
 | TableRow | `table-row.tsx` | TableRow, TableRowCell | TableRowCell variant: rank, score, code, lang |
 | Toggle | `toggle.tsx` | Toggle, ToggleLabel | size: sm, md · base-ui Switch |
+| Skeleton | `skeleton.tsx` | Skeleton, skeleton (styles) | — |
