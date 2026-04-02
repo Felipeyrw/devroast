@@ -3,15 +3,15 @@
 import { tv } from "tailwind-variants";
 
 const navbarStyles = tv({
-  base: "flex items-center justify-between border-b border-border-primary bg-bg-page px-10 py-3",
+  base: "flex w-full items-center justify-between border-b border-border-primary bg-bg-page px-6 py-3 sm:px-10",
 });
 
 const navbarLogoStyles = tv({
-  base: "flex items-center gap-2 font-mono",
+  base: "flex shrink-0 items-center gap-2 pl-2 font-mono sm:pl-0",
 });
 
 const navbarLinkStyles = tv({
-  base: "cursor-pointer font-mono text-sm text-text-primary transition-colors hover:text-accent-green",
+  base: "cursor-pointer font-mono text-[13px] text-text-secondary transition-colors hover:text-accent-green",
 });
 
 interface NavbarProps extends React.HTMLAttributes<HTMLElement> {}
