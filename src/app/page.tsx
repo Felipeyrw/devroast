@@ -4,6 +4,8 @@ import { SectionTitle } from "@/components/ui/section-title";
 import { TableRow, TableRowCell } from "@/components/ui/table-row";
 import { HydrateClient, prefetch, trpc } from "@/trpc/server";
 
+export const dynamic = "force-dynamic";
+
 export default function HomePage() {
   prefetch(trpc.stats.global.queryOptions());
 
