@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NavbarNavigation } from "@/components/navbar-navigation";
 import { Navbar, NavbarLogo } from "@/components/ui/navbar";
 import "./globals.css";
 
@@ -18,12 +19,7 @@ export default function RootLayout({
       <body className="flex min-h-full flex-col bg-bg-page font-sans text-text-primary">
         <Navbar>
           <NavbarLogo />
-          <a
-            href="/leaderboard"
-            className="cursor-pointer font-mono text-sm text-text-secondary transition-colors hover:text-text-primary"
-          >
-            leaderboard
-          </a>
+          <NavbarNavigation />
         </Navbar>
         {children}
       </body>

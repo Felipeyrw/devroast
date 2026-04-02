@@ -1,3 +1,5 @@
+"use client";
+
 import { tv } from "tailwind-variants";
 
 const navbarStyles = tv({
@@ -6,6 +8,10 @@ const navbarStyles = tv({
 
 const navbarLogoStyles = tv({
   base: "flex items-center gap-2 font-mono",
+});
+
+const navbarLinkStyles = tv({
+  base: "cursor-pointer font-mono text-sm text-text-primary transition-colors hover:text-accent-green",
 });
 
 interface NavbarProps extends React.HTMLAttributes<HTMLElement> {}
@@ -29,4 +35,31 @@ const NavbarLogo = ({ className, ...props }: NavbarLogoProps) => {
   );
 };
 
-export { Navbar, NavbarLogo, navbarStyles, navbarLogoStyles, type NavbarProps, type NavbarLogoProps };
+interface NavbarLinkProps extends React.HTMLAttributes<HTMLAnchorElement> {
+  href: string;
+}
+
+const NavbarLink = ({
+  className,
+  href,
+  children,
+  ...props
+}: NavbarLinkProps) => {
+  return (
+    <a href={href} className={navbarLinkStyles({ className })} {...props}>
+      {children}
+    </a>
+  );
+};
+
+export {
+  Navbar,
+  NavbarLink,
+  type NavbarLinkProps,
+  NavbarLogo,
+  type NavbarLogoProps,
+  type NavbarProps,
+  navbarLinkStyles,
+  navbarLogoStyles,
+  navbarStyles,
+};

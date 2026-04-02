@@ -3,6 +3,8 @@ import { codeToHtml } from "shiki";
 interface CodeBlockProps {
   code: string;
   language?: string;
+  showWindowHeader?: boolean;
+  filename?: string;
 }
 
 const sampleCode = `function calculateTotal(items) {
@@ -20,7 +22,12 @@ const sampleCode = `function calculateTotal(items) {
   return total;
 }`;
 
-const CodeBlock = async ({ code, language = "javascript" }: CodeBlockProps) => {
+const CodeBlock = async ({
+  code,
+  language = "javascript",
+  showWindowHeader = false,
+  filename,
+}: CodeBlockProps) => {
   const html = await codeToHtml(code, {
     lang: language,
     theme: "vesper",
@@ -30,14 +37,21 @@ const CodeBlock = async ({ code, language = "javascript" }: CodeBlockProps) => {
 
   return (
     <div className="overflow-hidden rounded border border-border-primary bg-bg-input">
-      {/* Window Header */}
-      <div className="flex h-10 items-center border-b border-border-primary px-4">
-        <div className="flex items-center gap-2">
-          <span className="size-3 rounded-full bg-accent-red" />
-          <span className="size-3 rounded-full bg-accent-amber" />
-          <span className="size-3 rounded-full bg-accent-green" />
+      {/* Window Header - only shown when showWindowHeader is true */}
+      {showWindowHeader && (
+        <div className="flex h-10 items-center border-b border-border-primary px-4">
+          <div className="flex items-center gap-2">
+            <span className="size-3 rounded-full bg-accent-red" />
+            <span className="size-3 rounded-full bg-accent-amber" />
+            <span className="size-3 rounded-full bg-accent-green" />
+          </div>
+          {filename && (
+            <span className="ml-4 font-mono text-xs text-text-secondary">
+              {filename}
+            </span>
+          )}
         </div>
-      </div>
+      )}
 
       {/* Code Content */}
       <div className="flex">
@@ -63,4 +77,4 @@ const CodeBlock = async ({ code, language = "javascript" }: CodeBlockProps) => {
   );
 };
 
-export { CodeBlock, sampleCode, type CodeBlockProps };
+export { CodeBlock, type CodeBlockProps, sampleCode };
