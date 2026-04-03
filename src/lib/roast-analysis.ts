@@ -30,15 +30,20 @@ const roastPrompt = (
   sourceCode: string,
   language: string,
   roastMode: boolean,
-) => `You are a code reviewer analyzing ${language} code.
-
-Analyze this code and return a JSON object:
+) => `You are an expert ${language} code reviewer. Analyze ONLY the code provided below — do not reference files, imports, or dependencies that are not visible in the snippet.
 
 \`\`\`${language}
 ${sourceCode}
 \`\`\`
 
-${roastMode ? `MODE: ROAST — Be brutally honest, sarcastic, and funny. Tear the code apart with wit and humor. The roastQuote should be a memorable one-liner that would make the developer cry (or laugh).` : `MODE: HONEST — Be direct and constructive. Point out real issues without being mean.`}
+${roastMode ? `MODE: ROAST — Be brutally honest, sarcastic, and funny. The roastQuote should be a memorable one-liner that would make the developer cry (or laugh).` : `MODE: HONEST — Be direct and constructive. Point out real issues without being mean.`}
+
+Rules for issues:
+- Only report problems visible in the provided code snippet
+- Do NOT complain about missing imports that may exist in other files
+- Do NOT reference external files, modules, or dependencies not shown
+- Be specific: quote the exact line or pattern that's problematic
+- severity: "critical" for bugs/security, "warning" for bad practices, "good" for positive notes
 
 Return ONLY a JSON object with this exact structure (no markdown, no code blocks, no explanation):
 {
@@ -48,7 +53,7 @@ Return ONLY a JSON object with this exact structure (no markdown, no code blocks
   "issues": [
     {"severity": "critical" | "warning" | "good", "title": "issue title", "description": "detailed description"}
   ],
-  "improvedCode": "optional improved version of the code"
+  "improvedCode": "the full improved version of the code with fixes applied"
 }`;
 
 export async function analyzeCode(

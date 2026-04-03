@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { CodeBlock } from "@/components/code-block";
+import { CodeDiff } from "@/components/code-diff";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -161,16 +162,18 @@ export default async function RoastResultsPage({
           </>
         )}
 
-        {/* Improved Code Section */}
+        {/* Improved Code Diff Section */}
         {roast.improvedCode && (
           <>
             <div className="mb-10">
-              <SectionTitle>improved_code</SectionTitle>
+              <SectionTitle>suggested_improvements</SectionTitle>
+              <p className="mt-2 font-mono text-xs text-text-tertiary">
+                {"//"} red lines removed, green lines added
+              </p>
               <div className="mt-4">
-                <CodeBlock
-                  code={roast.improvedCode}
-                  language={roast.language}
-                  showWindowHeader
+                <CodeDiff
+                  original={roast.sourceCode}
+                  improved={roast.improvedCode}
                 />
               </div>
             </div>
