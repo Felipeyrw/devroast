@@ -11,10 +11,10 @@ export function ShareButton({ slug }: { slug: string }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex cursor-pointer items-center gap-2 rounded border border-border-primary bg-bg-surface px-4 py-2 font-mono text-sm text-text-secondary transition-colors hover:border-accent-green hover:text-accent-green"
+        className="inline-flex cursor-pointer items-center gap-1.5 rounded border border-border-primary bg-bg-surface px-2.5 py-1 font-mono text-xs text-text-tertiary transition-colors hover:border-accent-green hover:text-accent-green"
       >
         <svg
-          className="h-4 w-4"
+          className="h-3.5 w-3.5"
           fill="none"
           stroke="currentColor"
           strokeWidth={2}

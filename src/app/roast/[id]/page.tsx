@@ -97,7 +97,6 @@ export default async function RoastResultsPage({
             <span className="font-mono text-xs text-text-tertiary">
               overall score
             </span>
-            <ShareButton slug={roast.slug} />
           </div>
 
           {/* Info Section */}
@@ -153,6 +152,7 @@ export default async function RoastResultsPage({
               <span className="font-mono text-xs text-text-tertiary">
                 {roast.issues.length} issues found
               </span>
+              <ShareButton slug={roast.slug} />
             </div>
           </div>
         </div>
