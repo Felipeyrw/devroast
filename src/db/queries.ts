@@ -87,7 +87,11 @@ export async function getLeaderboard(
 
   if (period === "this-month") {
     const now = new Date();
-    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfMonth = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      1,
+    ).toISOString();
     return query
       .where(sql`${submissions.createdAt} >= ${startOfMonth}`)
       .orderBy(asc(roasts.score))
