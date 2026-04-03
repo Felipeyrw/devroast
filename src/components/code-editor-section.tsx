@@ -1,12 +1,18 @@
 "use client";
 
 import { useMutation } from "@tanstack/react-query";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import { CodeEditor, type CodeEditorHandle } from "@/components/code-editor";
 import { Button } from "@/components/ui/button";
-import { Toggle, ToggleLabel } from "@/components/ui/toggle";
+import { ToggleLabel } from "@/components/ui/toggle";
 import { useTRPC } from "@/trpc/client";
+
+const Toggle = dynamic(
+  () => import("@/components/ui/toggle").then((m) => ({ default: m.Toggle })),
+  { ssr: false, loading: () => <div className="h-6 w-11" /> },
+);
 
 export function CodeEditorSection() {
   const editorRef = useRef<CodeEditorHandle>(null);

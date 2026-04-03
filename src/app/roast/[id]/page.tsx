@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CodeBlock } from "@/components/code-block";
 import { CodeDiff } from "@/components/code-diff";
+import { ShareButton } from "@/components/share-button";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -36,6 +38,39 @@ function getScoreColor(score: number): "red" | "amber" | "green" {
   return "green";
 }
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const roast = await getRoastBySlug(id);
+
+  if (!roast) {
+    return {
+      title: "Roast not found — devroast",
+    };
+  }
+
+  const score = Number(roast.score);
+
+  return {
+    title: `Score ${score}/10 — ${roast.verdict} — devroast`,
+    description: roast.roastQuote,
+    openGraph: {
+      title: `Score ${score}/10 — ${roast.verdict}`,
+      description: roast.roastQuote,
+      images: [`/roast/${id}/og`],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Score ${score}/10 — ${roast.verdict}`,
+      description: roast.roastQuote,
+      images: [`/roast/${id}/og`],
+    },
+  };
+}
+
 export default async function RoastResultsPage({
   params,
 }: {
@@ -62,6 +97,7 @@ export default async function RoastResultsPage({
             <span className="font-mono text-xs text-text-tertiary">
               overall score
             </span>
+            <ShareButton slug={roast.slug} />
           </div>
 
           {/* Info Section */}

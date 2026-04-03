@@ -42,11 +42,7 @@ interface ToggleProps extends ToggleVariants {
   className?: string;
 }
 
-const Toggle = ({
-  size,
-  className,
-  ...switchProps
-}: ToggleProps) => {
+const Toggle = ({ size, className, ...switchProps }: ToggleProps) => {
   const styles = toggleStyles({ size });
 
   return (
@@ -72,8 +68,8 @@ const ToggleLabel = ({ className, ...props }: ToggleLabelProps) => {
 export {
   Toggle,
   ToggleLabel,
-  toggleStyles,
+  type ToggleLabelProps,
   type ToggleProps,
   type ToggleVariants,
-  type ToggleLabelProps,
+  toggleStyles,
 };
