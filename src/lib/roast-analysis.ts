@@ -1,6 +1,10 @@
-import { groq } from "@ai-sdk/groq";
-import { generateText, Output } from "ai";
+import { createGroq } from "@ai-sdk/groq";
+import { generateText } from "ai";
 import { z } from "zod";
+
+const groq = createGroq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 
 const roastResponseSchema = z.object({
   score: z.number().min(0).max(10),
@@ -39,6 +43,7 @@ CRITICAL RULES — follow these exactly:
 7. The improvedCode must be the COMPLETE code with all fixes applied — not a partial snippet. Return the entire original code with improvements, not just the changed lines.
 8. You MUST return at least 1 issue in the issues array. Even good code has room for improvement.
 9. You MUST return the improvedCode field with the full corrected code — never null, never empty.
+10. Return ONLY valid JSON. Do NOT wrap the response in markdown code blocks. Do NOT use backticks anywhere in your response.
 
 ${roastMode ? `ROAST MODE: Be merciless, sarcastic, and hilarious. Your roastQuote should be a devastating one-liner that haunts the developer. Think Gordon Ramsay reviewing code. Be creative, witty, and brutal.` : `HONEST MODE: Be direct, precise, and constructive. No sugar-coating but no cruelty either.`}`;
 
@@ -47,7 +52,23 @@ const roastUserPrompt = (
   language: string,
 ) => `Review this ${language} code:
 
-${sourceCode}`;
+${sourceCode}
+
+Return ONLY a JSON object with these fields:
+- score: number 0-10
+- verdict: one of "needs_serious_help", "mediocre", "acceptable", "good_job", "chefs_kiss"
+- roastQuote: a short one-liner about the code quality
+- issues: array of objects with severity (critical/warning/good), title, and description — MUST have at least 1 issue
+- improvedCode: the FULL corrected code with all improvements applied — must be a non-empty string, never null`;
+
+function extractJson(text: string): string {
+  const firstBrace = text.indexOf("{");
+  const lastBrace = text.lastIndexOf("}");
+  if (firstBrace === -1 || lastBrace === -1) {
+    throw new Error("No JSON object found in response");
+  }
+  return text.slice(firstBrace, lastBrace + 1);
+}
 
 export async function analyzeCode(
   sourceCode: string,
@@ -59,8 +80,10 @@ export async function analyzeCode(
     system: roastSystemPrompt(language, roastMode),
     prompt: roastUserPrompt(sourceCode, language),
     temperature: roastMode ? 1.0 : 0.2,
-    output: Output.object({ schema: roastResponseSchema }),
   });
 
-  return result.output;
+  const text = await result.text;
+  const jsonStr = extractJson(text);
+  const parsed = JSON.parse(jsonStr);
+  return roastResponseSchema.parse(parsed);
 }
