@@ -85,7 +85,7 @@ export const CodeEditor = forwardRef<CodeEditorHandle, CodeEditorProps>(
       [onLanguageDetected],
     );
 
-    const handleSubmit = async () => {
+    const handleSubmit = useCallback(async () => {
       if (!code.trim()) return;
 
       if (detectTimer.current) {
@@ -96,7 +96,7 @@ export const CodeEditor = forwardRef<CodeEditorHandle, CodeEditorProps>(
       setLanguage(detected);
       setHighlighted(true);
       onSubmit?.(code, detected);
-    };
+    }, [code, onSubmit]);
 
     useImperativeHandle(ref, () => ({
       submit: handleSubmit,

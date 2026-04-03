@@ -199,10 +199,10 @@ export default async function RoastResultsPage({
         )}
 
         {/* Improved Code Diff Section */}
-        {roast.improvedCode && (
-          <>
-            <div className="mb-10">
-              <SectionTitle>suggested_improvements</SectionTitle>
+        <div className="mb-10">
+          <SectionTitle>suggested_improvements</SectionTitle>
+          {roast.improvedCode ? (
+            <>
               <p className="mt-2 font-mono text-xs text-text-tertiary">
                 {"//"} red lines removed, green lines added
               </p>
@@ -212,12 +212,16 @@ export default async function RoastResultsPage({
                   improved={roast.improvedCode}
                 />
               </div>
-            </div>
+            </>
+          ) : (
+            <p className="mt-4 font-mono text-sm text-text-tertiary">
+              {"//"} no improvements suggested — your code is already clean
+            </p>
+          )}
+        </div>
 
-            {/* Divider */}
-            <div className="mb-10 border-t border-border-primary" />
-          </>
-        )}
+        {/* Divider */}
+        <div className="mb-10 border-t border-border-primary" />
       </div>
     </main>
   );
