@@ -11,6 +11,11 @@ const badgeStyles = tv({
       warning: { root: "text-accent-amber", dot: "bg-accent-amber" },
       good: { root: "text-accent-green", dot: "bg-accent-green" },
       verdict: { root: "text-accent-red", dot: "bg-accent-red" },
+      needs_serious_help: { root: "text-accent-red", dot: "bg-accent-red" },
+      mediocre: { root: "text-accent-amber", dot: "bg-accent-amber" },
+      acceptable: { root: "text-accent-cyan", dot: "bg-accent-cyan" },
+      good_job: { root: "text-accent-green", dot: "bg-accent-green" },
+      chefs_kiss: { root: "text-accent-green", dot: "bg-accent-green" },
     },
   },
   defaultVariants: {
@@ -35,4 +40,4 @@ const Badge = ({ className, variant, children, ...props }: BadgeProps) => {
   );
 };
 
-export { Badge, badgeStyles, type BadgeProps, type BadgeVariants };
+export { Badge, type BadgeProps, type BadgeVariants, badgeStyles };
