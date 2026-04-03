@@ -51,3 +51,18 @@ body {
   font-size: inherit;
   line-height: inherit;
 }
+
+/* highlight.js reset inside .code-block */
+.code-block .hljs {
+  background: transparent !important;
+  padding: 0 !important;
+  font-family: inherit;
+  font-size: inherit;
+  line-height: inherit;
+}
+
+.code-block pre {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}

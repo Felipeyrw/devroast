@@ -6,9 +6,17 @@ import { HydrateClient, prefetch, trpc } from "@/trpc/server";
 
 export const dynamic = "force-dynamic";
 
-export default function LeaderboardPage() {
+export default async function LeaderboardPage(props: {
+  searchParams: Promise<{ period?: string }>;
+}) {
+  const { period = "all-time" } = await props.searchParams;
+  const validPeriod =
+    period === "this-month" ? "this-month" : "all-time";
+
   void Promise.all([
-    prefetch(trpc.roast.leaderboard.queryOptions({ limit: 20 })),
+    prefetch(
+      trpc.roast.leaderboard.queryOptions({ limit: 20, period: validPeriod }),
+    ),
     prefetch(trpc.stats.global.queryOptions()),
   ]);
 

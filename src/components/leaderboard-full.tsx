@@ -1,6 +1,7 @@
 "use client";
 
 import { useSuspenseQuery } from "@tanstack/react-query";
+import { useSearchParams } from "next/navigation";
 import { CollapsibleCode } from "@/components/collapsible-code";
 import { useTRPC } from "@/trpc/client";
 
@@ -24,8 +25,12 @@ function formatRelativeDate(date: Date): string {
 
 export function LeaderboardFull() {
   const trpc = useTRPC();
+  const searchParams = useSearchParams();
+  const period =
+    (searchParams.get("period") as "all-time" | "this-month") || "all-time";
+
   const { data } = useSuspenseQuery(
-    trpc.roast.leaderboard.queryOptions({ limit: 20 }),
+    trpc.roast.leaderboard.queryOptions({ limit: 20, period }),
   );
 
   if (!data || data.length === 0) {

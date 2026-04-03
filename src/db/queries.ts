@@ -1,4 +1,4 @@
-import { asc, avg, count, eq, min } from "drizzle-orm";
+import { asc, avg, count, eq, min, sql } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import { db } from "./index";
 import { issues, roasts, submissions } from "./schema";
@@ -67,8 +67,13 @@ export async function createRoast(
 
 // ── Reads (explicit joins, no relational query API) ────────────────────
 
-export async function getLeaderboard(limit = 50) {
-  return db
+export type LeaderboardPeriod = "all-time" | "this-month";
+
+export async function getLeaderboard(
+  limit = 50,
+  period: LeaderboardPeriod = "all-time",
+) {
+  const query = db
     .select({
       slug: roasts.slug,
       score: roasts.score,
@@ -78,13 +83,23 @@ export async function getLeaderboard(limit = 50) {
       createdAt: submissions.createdAt,
     })
     .from(roasts)
-    .innerJoin(submissions, eq(submissions.id, roasts.submissionId))
-    .orderBy(asc(roasts.score))
-    .limit(limit);
+    .innerJoin(submissions, eq(submissions.id, roasts.submissionId));
+
+  if (period === "this-month") {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    return query
+      .where(sql`${submissions.createdAt} >= ${startOfMonth}`)
+      .orderBy(asc(roasts.score))
+      .limit(limit);
+  }
+
+  return query.orderBy(asc(roasts.score)).limit(limit);
 }
 
 export const getLeaderboardCached = unstable_cache(
-  async (limit = 50) => getLeaderboard(limit),
+  async (limit = 50, period: LeaderboardPeriod = "all-time") =>
+    getLeaderboard(limit, period),
   ["leaderboard"],
   { revalidate: 3600, tags: ["leaderboard"] },
 );

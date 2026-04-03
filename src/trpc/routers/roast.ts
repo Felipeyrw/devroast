@@ -13,9 +13,10 @@ export const roastRouter = createTRPCRouter({
     .input(
       z.object({
         limit: z.number().int().positive().max(100).default(3),
+        period: z.enum(["all-time", "this-month"]).default("all-time"),
       }),
     )
-    .query(({ input }) => getLeaderboardCached(input.limit)),
+    .query(({ input }) => getLeaderboardCached(input.limit, input.period)),
 
   create: baseProcedure
     .input(
@@ -70,7 +71,7 @@ export const roastRouter = createTRPCRouter({
           score: analysis.score.toFixed(1),
           verdict: analysis.verdict,
           roastQuote: analysis.roastQuote,
-          improvedCode: analysis.improvedCode,
+          improvedCode: analysis.improvedCode || undefined,
           rawResponse: analysis,
         },
         analysis.issues.map((issue) => ({

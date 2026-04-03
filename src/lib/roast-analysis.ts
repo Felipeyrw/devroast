@@ -23,38 +23,49 @@ const roastResponseSchema = z.object({
       description: z.string(),
     }),
   ),
-  improvedCode: z.string().optional(),
+  improvedCode: z.string().nullable().optional(),
 });
 
-const roastPrompt = (
-  sourceCode: string,
+const roastSystemPrompt = (
   language: string,
   roastMode: boolean,
-) => `You are an expert ${language} code reviewer. Analyze ONLY the code provided below — do not reference files, imports, or dependencies that are not visible in the snippet.
+) => `You are a world-class ${language} code reviewer with a sharp eye for bad code.
 
-\`\`\`${language}
+CRITICAL RULES — follow these exactly:
+1. Analyze ONLY the code provided in the user message. Never reference files, imports, functions, or variables that are not visible in the snippet.
+2. Do NOT complain about "missing imports" — the code may import things in other files you cannot see.
+3. Do NOT say "unused import" unless the import AND its usage are both visible and the import is genuinely unused.
+4. Do NOT reference external dependencies, libraries, or modules not shown in the code.
+5. Be specific: quote the exact line, variable name, or pattern that is problematic.
+6. Score harshly: 0-3 for truly bad code, 4-6 for mediocre, 7-8 for decent, 9-10 only for exceptional code.
+7. The improvedCode must be the COMPLETE code with all fixes applied — not a partial snippet.
+8. Return ONLY valid JSON. Do NOT wrap the response in markdown code blocks. Do NOT use backticks anywhere in your response.
+
+${roastMode ? `ROAST MODE: Be merciless, sarcastic, and hilarious. Your roastQuote should be a devastating one-liner that haunts the developer. Think Gordon Ramsay reviewing code. Be creative, witty, and brutal.` : `HONEST MODE: Be direct, precise, and constructive. No sugar-coating but no cruelty either.`}`;
+
+const roastUserPrompt = (
+  sourceCode: string,
+  language: string,
+) => `Review this ${language} code:
+
 ${sourceCode}
-\`\`\`
 
-${roastMode ? `MODE: ROAST — Be brutally honest, sarcastic, and funny. The roastQuote should be a memorable one-liner that would make the developer cry (or laugh).` : `MODE: HONEST — Be direct and constructive. Point out real issues without being mean.`}
+Return ONLY a JSON object with these fields:
+- score: number 0-10
+- verdict: one of "needs_serious_help", "mediocre", "acceptable", "good_job", "chefs_kiss"
+- roastQuote: a short one-liner about the code quality
+- issues: array of objects with severity (critical/warning/good), title, and description
+- improvedCode: the full corrected code (or null if no improvements needed)`;
 
-Rules for issues:
-- Only report problems visible in the provided code snippet
-- Do NOT complain about missing imports that may exist in other files
-- Do NOT reference external files, modules, or dependencies not shown
-- Be specific: quote the exact line or pattern that's problematic
-- severity: "critical" for bugs/security, "warning" for bad practices, "good" for positive notes
-
-Return ONLY a JSON object with this exact structure (no markdown, no code blocks, no explanation):
-{
-  "score": 0-10,
-  "verdict": "needs_serious_help" | "mediocre" | "acceptable" | "good_job" | "chefs_kiss",
-  "roastQuote": "short punchy one-liner",
-  "issues": [
-    {"severity": "critical" | "warning" | "good", "title": "issue title", "description": "detailed description"}
-  ],
-  "improvedCode": "the full improved version of the code with fixes applied"
-}`;
+function extractJson(text: string): string {
+  // Try to find JSON object boundaries
+  const firstBrace = text.indexOf("{");
+  const lastBrace = text.lastIndexOf("}");
+  if (firstBrace === -1 || lastBrace === -1) {
+    throw new Error("No JSON object found in response");
+  }
+  return text.slice(firstBrace, lastBrace + 1);
+}
 
 export async function analyzeCode(
   sourceCode: string,
@@ -63,14 +74,12 @@ export async function analyzeCode(
 ) {
   const { text } = await generateText({
     model: groq("llama-3.1-8b-instant"),
-    prompt: roastPrompt(sourceCode, language, roastMode),
-    temperature: roastMode ? 0.9 : 0.3,
+    system: roastSystemPrompt(language, roastMode),
+    prompt: roastUserPrompt(sourceCode, language),
+    temperature: roastMode ? 1.0 : 0.2,
   });
 
-  const cleaned = text
-    .replace(/```json\n?/g, "")
-    .replace(/```\n?/g, "")
-    .trim();
-  const parsed = JSON.parse(cleaned);
+  const jsonStr = extractJson(text);
+  const parsed = JSON.parse(jsonStr);
   return roastResponseSchema.parse(parsed);
 }

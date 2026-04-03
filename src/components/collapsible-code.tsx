@@ -23,12 +23,29 @@ export function CollapsibleCode({
   language,
   collapsedLines = 3,
 }: CollapsibleCodeProps) {
-  const lines = useMemo(() => code.trimEnd().split("\n"), [code]);
+  const lines = useMemo(
+    () =>
+      code
+        .trimEnd()
+        .split("\n")
+        .filter((_, i, arr) => i < arr.length - 1 || arr[i].trim() !== ""),
+    [code],
+  );
   const isCollapsible = lines.length > collapsedLines;
 
+  const trimmedCode = useMemo(
+    () =>
+      code
+        .trimEnd()
+        .split("\n")
+        .filter((_, i, arr) => i < arr.length - 1 || arr[i].trim() !== "")
+        .join("\n"),
+    [code],
+  );
+
   const highlightedFull = useMemo(
-    () => highlight(code.trimEnd(), language),
-    [code, language],
+    () => highlight(trimmedCode, language),
+    [trimmedCode, language],
   );
 
   const highlightedPreview = useMemo(() => {
@@ -89,7 +106,7 @@ function CodeContent({ html, lines }: { html: string; lines: string[] }) {
 
       {/* Syntax Highlighted Code */}
       <div
-        className="flex-1 overflow-x-auto px-3 py-3 font-mono text-xs leading-[21px]"
+        className="code-block flex-1 overflow-x-auto px-3 py-3 font-mono text-xs leading-[21px]"
         // biome-ignore lint/security/noDangerouslySetInnerHtml: syntax highlighting from trusted source
         dangerouslySetInnerHTML={{ __html: html }}
       />
