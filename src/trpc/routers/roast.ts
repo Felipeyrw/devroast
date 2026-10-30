@@ -78,6 +78,7 @@ export const roastRouter = createTRPCRouter({
           input.roastMode,
         );
       } catch (err: unknown) {
+        console.error("[roast.create] Code analysis failed:", err);
         throw new TRPCError({
           code: "BAD_GATEWAY",
           message:
@@ -99,6 +100,7 @@ export const roastRouter = createTRPCRouter({
           roastMode: input.roastMode,
         });
       } catch (err: unknown) {
+        console.error("[roast.create] Submission creation failed:", err);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message:
@@ -134,6 +136,7 @@ export const roastRouter = createTRPCRouter({
 
         return { slug: roast.slug };
       } catch (err: unknown) {
+        console.error("[roast.create] Roast creation failed:", err);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
           message:

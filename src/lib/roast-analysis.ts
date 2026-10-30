@@ -76,7 +76,7 @@ export async function analyzeCode(
   roastMode: boolean,
 ) {
   const result = await generateText({
-    model: groq("llama-3.1-8b-instant"),
+    model: groq("Qwen/Qwen3.8-27B"),
     system: roastSystemPrompt(language, roastMode),
     prompt: roastUserPrompt(sourceCode, language),
     temperature: roastMode ? 1.0 : 0.2,
