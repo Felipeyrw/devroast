@@ -4,7 +4,7 @@
 
 Paste a code snippet, get a score from **0 to 10**, and find out what you can improve—with constructive feedback or a full roast.
 
-![DevRoast homepage with the code editor and roast mode](../assets/devRoast_getRoasted.png)
+![DevRoast homepage with the code editor and roast mode](assets/devRoast_getRoasted.png)
 
 ## How it works
 
@@ -28,17 +28,17 @@ The editor accepts up to **2,000 characters** per analysis.
 
 The results page brings together your score, submitted snippet, detected issues, and suggested improvements.
 
-![Analysis summary and submitted code](../assets/devRoast_roast1.png)
+![Analysis summary and submitted code](assets/devRoast_roast1.png)
 
-![Issues found during the analysis](../assets/devRoast_roast2.png)
+![Issues found during the analysis](assets/devRoast_roast2.png)
 
-![Comparison between the submitted code and the improved version](../assets/devRoast_roast3.png)
+![Comparison between the submitted code and the improved version](assets/devRoast_roast3.png)
 
 ### Community leaderboard
 
 Browse the lowest-scoring submissions and filter results by all time or this month.
 
-![DevRoast Shame Leaderboard](../assets/devRoast_leaderboard.png)
+![DevRoast Shame Leaderboard](assets/devRoast_leaderboard.png)
 
 ## Pages
 

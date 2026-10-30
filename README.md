@@ -4,7 +4,7 @@
 
 Cole um trecho de código, receba uma avaliação de **0 a 10** e descubra o que pode melhorar — com feedback construtivo ou em modo roast.
 
-![Página inicial do DevRoast, com editor de código e modo roast](../assets/devRoast_getRoasted.png)
+![Página inicial do DevRoast, com editor de código e modo roast](assets/devRoast_getRoasted.png)
 
 ## Como funciona
 
@@ -28,17 +28,17 @@ O editor aceita até **2.000 caracteres** por análise.
 
 A página do resultado reúne a nota, o trecho enviado, os problemas encontrados e as melhorias sugeridas.
 
-![Resumo do resultado e código enviado](../assets/devRoast_roast1.png)
+![Resumo do resultado e código enviado](assets/devRoast_roast1.png)
 
-![Problemas encontrados durante a análise](../assets/devRoast_roast2.png)
+![Problemas encontrados durante a análise](assets/devRoast_roast2.png)
 
-![Comparação entre o código enviado e a versão melhorada](../assets/devRoast_roast3.png)
+![Comparação entre o código enviado e a versão melhorada](assets/devRoast_roast3.png)
 
 ### Ranking da comunidade
 
 Veja os códigos com as menores notas e filtre os resultados entre todo o período e este mês.
 
-![Shame Leaderboard do DevRoast](../assets/devRoast_leaderboard.png)
+![Shame Leaderboard do DevRoast](assets/devRoast_leaderboard.png)
 
 ## Páginas
 
