@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CodeBlock } from "@/components/code-block";
 import { CodeDiff } from "@/components/code-diff";
+import { ShareButton } from "@/components/share-button";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -34,6 +36,39 @@ function getScoreColor(score: number): "red" | "amber" | "green" {
   if (score < 4) return "red";
   if (score < 7) return "amber";
   return "green";
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const roast = await getRoastBySlug(id);
+
+  if (!roast) {
+    return {
+      title: "Roast not found — devroast",
+    };
+  }
+
+  const score = Number(roast.score);
+
+  return {
+    title: `Score ${score}/10 — ${roast.verdict} — devroast`,
+    description: roast.roastQuote,
+    openGraph: {
+      title: `Score ${score}/10 — ${roast.verdict}`,
+      description: roast.roastQuote,
+      images: [`/roast/${id}/og`],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `Score ${score}/10 — ${roast.verdict}`,
+      description: roast.roastQuote,
+      images: [`/roast/${id}/og`],
+    },
+  };
 }
 
 export default async function RoastResultsPage({
@@ -117,6 +152,7 @@ export default async function RoastResultsPage({
               <span className="font-mono text-xs text-text-tertiary">
                 {roast.issues.length} issues found
               </span>
+              <ShareButton slug={roast.slug} />
             </div>
           </div>
         </div>
@@ -163,10 +199,10 @@ export default async function RoastResultsPage({
         )}
 
         {/* Improved Code Diff Section */}
-        {roast.improvedCode && (
-          <>
-            <div className="mb-10">
-              <SectionTitle>suggested_improvements</SectionTitle>
+        <div className="mb-10">
+          <SectionTitle>suggested_improvements</SectionTitle>
+          {roast.improvedCode ? (
+            <>
               <p className="mt-2 font-mono text-xs text-text-tertiary">
                 {"//"} red lines removed, green lines added
               </p>
@@ -176,12 +212,16 @@ export default async function RoastResultsPage({
                   improved={roast.improvedCode}
                 />
               </div>
-            </div>
+            </>
+          ) : (
+            <p className="mt-4 font-mono text-sm text-text-tertiary">
+              {"//"} no improvements suggested — your code is already clean
+            </p>
+          )}
+        </div>
 
-            {/* Divider */}
-            <div className="mb-10 border-t border-border-primary" />
-          </>
-        )}
+        {/* Divider */}
+        <div className="mb-10 border-t border-border-primary" />
       </div>
     </main>
   );

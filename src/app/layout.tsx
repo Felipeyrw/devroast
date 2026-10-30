@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: "devroast — paste your code. get roasted.",
   description:
     "Drop your code below and we'll rate it — brutally honest or full roast mode.",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+  ),
 };
 
 export default function RootLayout({
